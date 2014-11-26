@@ -1,0 +1,100 @@
+#!/sbin/busybox sh
+
+echo "----------------------------------------------------"
+echo "----------------------------------------------------"
+echo "--script ESA--"
+echo "----------------------------------------------------"
+echo "----------------------------------------------------"
+
+/sbin/busybox mkdir /mnt/sdcard
+/sbin/busybox mount -t auto -o errors=continue,noatime,fmask=0000,dmask=0000,rw /dev/block/nandk /mnt/sdcard
+/sbin/busybox mkdir /mnt/extsd
+/sbin/busybox mount -t auto -o errors=continue,noatime,fmask=0000,dmask=0000,rw /dev/block/mmcblk0p1 /mnt/extsd
+
+
+#test si existance d'une carte sd
+/sbin/busybox mount | grep " /mnt/extsd "
+if [ $? -eq 1 ] ; then
+    /sbin/busybox echo "--- Pas de carte SD travaille sur Flash interne"
+    ESADIR=/mnt/sdcard;
+else
+    /sbin/busybox echo "--- Carte SD détecté utilisation de celle-ci"
+    ESADIR=/mnt/extsd;
+fi
+
+#compatibilie avec ancien appareil
+if test -s $ESADIR/home ; then
+	/sbin/busybox echo "--- Repertoire home present"
+else
+	/sbin/busybox echo "--- Creation repertoire home"
+	/sbin/busybox mkdir $ESADIR/home;
+	/sbin/busybox cp -rf /system/def/home/* $ESADIR/home
+fi
+
+if test -s $ESADIR/usr ; then
+	/sbin/busybox echo "--- Repertoire usr present"
+else
+	/sbin/busybox echo "--- Creation repertoire usr"
+	/sbin/busybox mkdir $ESADIR/usr; 
+#	cp -r /usr_base/* /mnt/envsa/usr
+fi
+
+#données connexes de fonctionnement
+if test -s $ESADIR/esa ; then
+	/sbin/busybox echo "--- Repertoire esa present"
+else
+	/sbin/busybox echo "--- Creation repertoire esa"
+	/sbin/busybox mkdir $ESADIR/esa;
+fi
+
+/sbin/busybox mount -o bind $ESADIR/home /home
+/sbin/busybox mount -o bind $ESADIR/usr /usr
+/sbin/busybox mount -o bind $ESADIR/esa /esa
+
+if test -s /dev/shm ; then
+	/sbin/busybox echo "--- Repertoire /dev/shm present"
+else
+	/sbin/busybox echo "--- Creation repertoire /dev/shm"
+	/sbin/busybox mkdir /dev/shm; 
+fi
+
+/sbin/busybox mkdir /dev/shm
+/sbin/busybox mount -t tmpfs tmpfs /dev/shm
+
+/sbin/busybox mount -t usbfs usbfs /proc/bus/usb
+
+if test -s $ESADIR/esa/dropbear ; then
+	/sbin/busybox echo "--- Repertoire dropbear present"
+else
+	/sbin/busybox echo "--- Creation repertoire dropbear"
+	/sbin/busybox mkdir $ESADIR/esa/dropbear; 
+fi
+
+if test -s $ESADIR/esa/dropbear/dropbear_rsa_host_key ; then
+	/sbin/busybox echo "--- Clef rsa presente"
+else
+	/sbin/busybox echo "--- Creation calcule clef rsa"
+	/system/xbin/dropbearkey -t rsa -f $ESADIR/esa/dropbear/dropbear_rsa_host_key 
+fi
+
+if test -s $ESADIR/esa/dropbear/dropbear_dss_host_key ;then
+	/sbin/busybox echo "--- Clef dss presente"
+else
+	/sbin/busybox echo "--- Creation calcule clef dss"
+	/system/xbin/dropbearkey -t dss -f $ESADIR/esa/dropbear/dropbear_dss_host_key 
+fi
+
+if test -s $ESADIR/esa/dropbear/id_rsa ;then
+	/sbin/busybox echo "--- Clef dss presente"
+else
+	/sbin/busybox echo "--- Creation calcule clef dss"
+	/system/xbin/dropbearkey -t rsa -f $ESADIR/esa/dropbear/id_rsa
+	/system/xbin/dropbearkey -f $ESADIR/esa/dropbear/id_rsa -y > $ESADIR/esa/dropbear/id_rsa.pub	
+fi
+
+/home/rc.sh
+
+# Toujours en fin
+/sbin/busybox echo "--- Fin du boot init.esa.sh" 
+sync;
+setprop cm.filesystem.ready 1;
