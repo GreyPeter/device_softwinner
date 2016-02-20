@@ -14,6 +14,15 @@
 
 LOCAL_PATH := $(call my-dir)
 
+include $(CLEAR_VARS)
+LOCAL_MODULE       := wpa_supplicant_overlay.conf
+LOCAL_MODULE_TAGS  := eng
+LOCAL_MODULE_CLASS := ETC
+LOCAL_SRC_FILES    := $(LOCAL_MODULE)
+LOCAL_MODULE_PATH  := $(TARGET_OUT_ETC)/wifi
+include $(BUILD_PREBUILT)
+
 ifneq ($(filter wing%,$(TARGET_DEVICE)),)
 include $(call all-makefiles-under,$(LOCAL_PATH))
 endif
+

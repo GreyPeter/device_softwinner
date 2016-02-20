@@ -4,6 +4,19 @@ $(call inherit-product, device/softwinner/common/sw-common.mk)
 
 DEVICE_PACKAGE_OVERLAYS := device/softwinner/wing-common/overlay
 
+#PRODUCT_BOOT_JARS += 
+
+#audio
+PRODUCT_PACKAGES += \
+	stagefright \
+	record \
+	recordvideo \
+	audioloop \
+	stream \
+	sf2 \
+	codec \
+	muxer
+
 #apk envsa
 PRODUCT_PACKAGES += \
 	libscreenblkjni \

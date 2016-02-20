@@ -1,2 +1,0 @@
-PRODUCT_MAKEFILES := \
-	$(LOCAL_DIR)/wing_nck70.mk
