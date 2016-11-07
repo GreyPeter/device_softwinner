@@ -9,7 +9,7 @@ on init
     mkdir /bootloader
     exec /sbin/busybox sh /sbin/init_parttion.sh
 
-service console /sbin/sh
+service console /sbin/busybox sh
     console
     disabled
     user root
