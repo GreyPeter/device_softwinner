@@ -264,7 +264,7 @@ public class FileManager {
 		String copyName = mContext.getResources().getString(R.string.Copied);
 		
 		if(old_file.isFile() && temp_dir.isDirectory() && temp_dir.canWrite()){
-			//Èç¹û¸´ÖÆµ½×Ô¼ºµÄ¸¸Ä¿Â¼,Ôò
+			//å¦‚æœå¤åˆ¶åˆ°è‡ªå·±çš„çˆ¶ç›®å½•,åˆ™
 			String new_name = "";
 			if(old_file.getParent().equals(temp_dir.getAbsolutePath())){
 				new_name = newDir + "/" + copyName + old.substring(old.lastIndexOf("/") + 1, old.length());
@@ -306,7 +306,7 @@ public class FileManager {
 		}else if(old_file.isDirectory() && temp_dir.isDirectory() && temp_dir.canWrite()) {
 			String files[] = old_file.list();
 			String dir = "copyFile";
-			//Èç¹û¸´ÖÆµ½×Ô¼ºµÄ¸¸Ä¿Â¼,Ôò
+			//å¦‚æœå¤åˆ¶åˆ°è‡ªå·±çš„çˆ¶ç›®å½•,åˆ™
 			if(old_file.getParent().equals(temp_dir.getAbsolutePath())){
 				dir = newDir + "/" + copyName + old.substring(old.lastIndexOf("/") + 1, old.length());
 				int n = 2;

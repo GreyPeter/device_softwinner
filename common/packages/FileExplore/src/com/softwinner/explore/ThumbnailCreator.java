@@ -46,7 +46,7 @@ public class ThumbnailCreator {
 		File f = new File(imageSrc);
 		Bitmap bmp = MessageCache.getInstance().loadThumbnailMessage(imageSrc);
 		if(bmp != null){
-			//Èç¹û±£´æµÄĞŞ¸ÄÈÕÆÚ²»Ò»ÖÂ,ËµÃ÷ÎÄ¼ş±»ĞŞ¸Ä¹ı,ĞèÒªÖØĞÂÉú³ÉËõÂÔÍ¼
+			//å¦‚æœä¿å­˜çš„ä¿®æ”¹æ—¥æœŸä¸ä¸€è‡´,è¯´æ˜æ–‡ä»¶è¢«ä¿®æ”¹è¿‡,éœ€è¦é‡æ–°ç”Ÿæˆç¼©ç•¥å›¾
 			if(MessageCache.getInstance().loadModifiedTime(imageSrc) != f.lastModified()){
 				Log.d(TAG," the file had been change since last time,I should request thumbnail again ");
 				return null;
@@ -86,9 +86,9 @@ public class ThumbnailCreator {
 	}
 	
 	/**
-	 * ´´½¨ËõÂÔÍ¼
+	 * åˆ›å»ºç¼©ç•¥å›¾
 	 * @param imageSrc
-	 * @return ·µ»Ønull,Èç¹ûÕâÊ±ÎŞ·¨»ñµÃËõÂÔÍ¼
+	 * @return è¿”å›null,å¦‚æœè¿™æ—¶æ— æ³•è·å¾—ç¼©ç•¥å›¾
 	 */
 	public Bitmap createThumbnail(String imageSrc) 
 	{
@@ -181,7 +181,7 @@ public class ThumbnailCreator {
 			thumb = BitmapFactory.decodeFile(imageSrc, options);
 			if(thumb == null)
 			{
-				/* µ±²»¿ÉdecodeÊ±·µ»Ønull */
+				/* å½“ä¸å¯decodeæ—¶è¿”å›null */
 				return null;
 			}
 			thumb = Bitmap.createScaledBitmap(thumb, width, height, false);
