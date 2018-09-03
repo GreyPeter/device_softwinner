@@ -1,12 +1,12 @@
 #!/bin/bash
 function cdevice()
-{	
+{
 	cd $DEVICE
 }
 
 function cout()
 {
-	cd $OUT	
+	cd $OUT
 }
 
 function extract-bsp()
@@ -15,7 +15,7 @@ function extract-bsp()
 	LINUXOUT_DIR=$LICHEE_DIR/out/android/common
 	LINUXOUT_MODULE_DIR=$LICHEE_DIR/out/android/common/lib/modules/*/*
 	CURDIR=$PWD
-
+	DEVICE=$T/device/*/$TARGET_PRODUCT
 	cd $DEVICE
 
 	#extract kernel
@@ -35,7 +35,7 @@ function extract-bsp()
 	chmod 0755 modules/modules/*
 
 # create modules.mk
-(cat << EOF) > ./modules/modules.mk 
+(cat << EOF) > ./modules/modules.mk
 # modules.mk generate by extract-files.sh , do not edit it !!!!
 PRODUCT_COPY_FILES += \\
 	\$(call find-copy-subdir-files,*,\$(LOCAL_PATH)/modules,system/vendor/modules)
@@ -56,7 +56,7 @@ function make-all()
 
 	extract-bsp
 	m -j8
-} 
+}
 
 
 function pack()
@@ -72,14 +72,14 @@ function exdroid_diff()
 {
 	echo "please check v1, v2 in build/tools/exdroid_diff.sh (^C to break)"
 	read
-	repo forall -c '$ANDROID_BUILD_TOP/build/tools/exdroid_diff.sh'	
+	repo forall -c '$ANDROID_BUILD_TOP/build/tools/exdroid_diff.sh'
 }
 
 function exdroid_patch()
 {
 	echo "please confirm this is v1 (^C to break)"
 	read
-	repo forall -c '$ANDROID_BUILD_TOP/build/tools/exdroid_patch.sh'	
+	repo forall -c '$ANDROID_BUILD_TOP/build/tools/exdroid_patch.sh'
 }
 
 function get_uboot()
